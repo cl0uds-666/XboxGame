@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b65a64fb15c46314caaf7fb49e78f42d
+timeCreated: 1467783927
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Buildings/SC_Bld_StatueOfLiberty.prefab
+  uploadId: 738498

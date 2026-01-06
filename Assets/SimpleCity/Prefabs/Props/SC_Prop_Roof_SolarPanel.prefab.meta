@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c1de798aff648da41b842cab539a213f
+timeCreated: 1467783923
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Props/SC_Prop_Roof_SolarPanel.prefab
+  uploadId: 738498

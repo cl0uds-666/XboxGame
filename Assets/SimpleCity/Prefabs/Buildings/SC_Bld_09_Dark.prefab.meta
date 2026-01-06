@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7cc5032dd77322e49bd8ef0d428d72a7
+timeCreated: 1467783924
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Buildings/SC_Bld_09_Dark.prefab
+  uploadId: 738498

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 49c988d25d5554d46948b5a14c6cd8af
+timeCreated: 1467783928
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Props/SC_Prop_Construction_Wood.prefab
+  uploadId: 738498

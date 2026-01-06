@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 92f17c70ad4e14540abe39b2dc2ae487
+timeCreated: 1467783929
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Props/SC_Prop_Sign_Library.prefab
+  uploadId: 738498

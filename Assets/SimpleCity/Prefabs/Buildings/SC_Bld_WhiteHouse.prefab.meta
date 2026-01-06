@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d30455ed977046e4b8fb1afe67d2e30b
+timeCreated: 1467783928
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Buildings/SC_Bld_WhiteHouse.prefab
+  uploadId: 738498

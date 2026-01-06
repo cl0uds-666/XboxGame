@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: eaa7008022eea294c8a1908b158be2f1
+timeCreated: 1469400360
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Buildings/SC_Bld_CapitolBuilding.prefab
+  uploadId: 738498

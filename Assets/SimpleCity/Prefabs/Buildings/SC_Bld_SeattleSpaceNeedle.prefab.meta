@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 32b866662c594944f826315f7a3fd4a1
+timeCreated: 1467783930
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Buildings/SC_Bld_SeattleSpaceNeedle.prefab
+  uploadId: 738498

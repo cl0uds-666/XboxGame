@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6cc0a9868f3e6f443add31eb21f7329e
+timeCreated: 1467783922
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Buildings/SC_Bld_05_Brown.prefab
+  uploadId: 738498

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8e9097c8d00ee764398f36bdeec4ab8f
+timeCreated: 1467783926
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Props/SC_Prop_Construction_Beams.prefab
+  uploadId: 738498

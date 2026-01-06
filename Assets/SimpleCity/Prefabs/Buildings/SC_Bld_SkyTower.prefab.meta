@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 44609948e676ac741af1c74bacf633e8
+timeCreated: 1469400360
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68420
+  packageName: Simple City - Cartoon assets
+  packageVersion: 1.2.1
+  assetPath: Assets/SimpleCity/Prefabs/Buildings/SC_Bld_SkyTower.prefab
+  uploadId: 738498
