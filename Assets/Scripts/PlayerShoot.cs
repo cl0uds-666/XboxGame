@@ -24,8 +24,10 @@ public class PlayerShoot : MonoBehaviour
 
     }
 
-    void TryFire()
+    public void TryFire()
     {
+        GetComponent<PlayerRumble>()?.Rumble(0.2f, 0.6f, 0.08f);
+
         Vector3 origin = transform.position + Vector3.up * 1.0f;   // locked height
         Vector3 dir = transform.forward;
         dir.y = 0f;
