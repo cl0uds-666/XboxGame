@@ -1,9 +1,12 @@
 using UnityEngine;
+using System;
 
 public class EnemyHealth : MonoBehaviour
 {
     public float maxHealth = 50f;
     private float currentHealth;
+
+    public Action onDeath;
 
     void Awake()
     {
@@ -22,6 +25,8 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+        onDeath?.Invoke();
+
         // call ZombieAI.Die() here
         ZombieAI ai = GetComponent<ZombieAI>();
         if (ai != null)

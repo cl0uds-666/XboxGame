@@ -7,25 +7,23 @@ public class PlayerShoot : MonoBehaviour
     public float range = 50f;
     public float fireRate = 8f; // shots per second
 
-    [Header("Input")]
-    public string fireButton = "Fire1";
-
     [Header("Origin")]
     public Transform firePoint; // optional; if null we use transform position + up
 
+    [Header("Audio")]
+    public AudioSource shootAudio;
+
+
     private float nextFireTime;
-
-    void Update()
-    {
-        if (Input.GetButtonDown(fireButton))
-        {
-            TryFire();
-        }
-
-    }
 
     public void TryFire()
     {
+
+        if (shootAudio != null)
+        {
+            shootAudio.Play();
+        }
+
         GetComponent<PlayerRumble>()?.Rumble(0.2f, 0.6f, 0.08f);
 
         Vector3 origin = transform.position + Vector3.up * 1.0f;   // locked height

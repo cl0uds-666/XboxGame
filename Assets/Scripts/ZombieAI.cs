@@ -110,8 +110,12 @@ public class ZombieAI : MonoBehaviour
             lastAttackTime = Time.time;
             Debug.Log("Zombie Attacks! Damage: " + attackDamage);
 
-            // We'll hook this into PlayerHealth later.
-            // For now, this is just a placeholder that proves the attack works.
+            PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(attackDamage);
+            }
+
         }
     }
 

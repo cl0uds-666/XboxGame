@@ -51,13 +51,12 @@ public class PlayerInputNew : MonoBehaviour
 
     public void OnShoot(InputValue value)
     {
-        // rightTrigger gives float 0..1
         if (value.Get<float>() > 0.5f)
         {
-            
-            shoot?.SendMessage("TryFire", SendMessageOptions.DontRequireReceiver);
+            shoot?.TryFire();
         }
     }
+
 
     public void OnPause(InputValue value)
     {
