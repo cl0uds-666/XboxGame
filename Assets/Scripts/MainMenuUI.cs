@@ -12,6 +12,11 @@ public class MainMenuUI : MonoBehaviour
         SceneManager.LoadScene(1); // your game scene index
     }
 
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene(0); // main menu scene index
+    }
+
     public void QuitGame()
     {
         Debug.Log("QuitGame called!");
