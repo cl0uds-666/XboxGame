@@ -15,6 +15,7 @@ public class WinZone : MonoBehaviour
     public string holdPositionMessage = "Hold down the position whilst awaiting your team";
 
     private HashSet<PlayerHealth> playersInside = new HashSet<PlayerHealth>();
+    private readonly List<TextMeshProUGUI> statusTargets = new List<TextMeshProUGUI>();
 
     void Update()
     {
@@ -86,14 +87,12 @@ public class WinZone : MonoBehaviour
 
     private void UpdateStatus(bool deadPlayerOutside, bool alivePlayerOutside, int totalInside)
     {
-        if (statusText == null) return;
+        List<TextMeshProUGUI> targets = GetStatusTargets();
+        if (targets.Count == 0) return;
 
         if (totalInside <= 0)
         {
-            if (statusText.gameObject.activeSelf)
-            {
-                statusText.gameObject.SetActive(false);
-            }
+            SetTargetsActive(targets, false, null);
             return;
         }
 
@@ -110,21 +109,59 @@ public class WinZone : MonoBehaviour
 
         if (string.IsNullOrEmpty(message))
         {
-            if (statusText.gameObject.activeSelf)
-            {
-                statusText.gameObject.SetActive(false);
-            }
+            SetTargetsActive(targets, false, null);
             return;
         }
 
-        if (statusText.text != message)
+        SetTargetsActive(targets, true, message);
+    }
+
+    private List<TextMeshProUGUI> GetStatusTargets()
+    {
+        statusTargets.Clear();
+
+        if (statusText != null)
         {
-            statusText.text = message;
+            statusTargets.Add(statusText);
         }
 
-        if (!statusText.gameObject.activeSelf)
+        PlayerRespawnUI[] uiInstances = FindObjectsOfType<PlayerRespawnUI>(true);
+        for (int i = 0; i < uiInstances.Length; i++)
         {
-            statusText.gameObject.SetActive(true);
+            PlayerRespawnUI ui = uiInstances[i];
+            if (ui == null || ui.winStatusText == null)
+            {
+                continue;
+            }
+
+            if (!statusTargets.Contains(ui.winStatusText))
+            {
+                statusTargets.Add(ui.winStatusText);
+            }
+        }
+
+        return statusTargets;
+    }
+
+    private void SetTargetsActive(List<TextMeshProUGUI> targets, bool isActive, string message)
+    {
+        for (int i = 0; i < targets.Count; i++)
+        {
+            TextMeshProUGUI target = targets[i];
+            if (target == null)
+            {
+                continue;
+            }
+
+            if (!string.IsNullOrEmpty(message) && target.text != message)
+            {
+                target.text = message;
+            }
+
+            if (target.gameObject.activeSelf != isActive)
+            {
+                target.gameObject.SetActive(isActive);
+            }
         }
     }
 }

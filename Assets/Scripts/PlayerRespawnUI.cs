@@ -10,6 +10,7 @@ public class PlayerRespawnUI : MonoBehaviour
 
     [Header("UI Reference (auto)")]
     public TextMeshProUGUI respawnText;
+    public TextMeshProUGUI winStatusText;
 
     [Header("Messages")]
     [TextArea(2, 3)]
@@ -123,7 +124,7 @@ public class PlayerRespawnUI : MonoBehaviour
                 uiInstance.transform.SetParent(myCamera.transform, false);
             }
 
-            respawnText = uiInstance.GetComponentInChildren<TextMeshProUGUI>(true);
+            CacheUiTextReferences(uiInstance);
             if (respawnText != null)
             {
                 if (string.IsNullOrWhiteSpace(respawnMessage))
@@ -131,6 +132,10 @@ public class PlayerRespawnUI : MonoBehaviour
                     respawnMessage = respawnText.text;
                 }
                 respawnText.gameObject.SetActive(false);
+            }
+            if (winStatusText != null)
+            {
+                winStatusText.gameObject.SetActive(false);
             }
         }
 
@@ -141,6 +146,11 @@ public class PlayerRespawnUI : MonoBehaviour
             existingCanvas.worldCamera = myCamera;
             existingCanvas.targetDisplay = myCamera.targetDisplay;
             existingCanvas.transform.SetParent(myCamera.transform, false);
+        }
+
+        if (existingCanvas != null)
+        {
+            CacheUiTextReferences(existingCanvas.gameObject);
         }
     }
 
@@ -194,6 +204,38 @@ public class PlayerRespawnUI : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void CacheUiTextReferences(GameObject root)
+    {
+        if (root == null)
+        {
+            return;
+        }
+
+        TextMeshProUGUI[] texts = root.GetComponentsInChildren<TextMeshProUGUI>(true);
+        for (int i = 0; i < texts.Length; i++)
+        {
+            TextMeshProUGUI text = texts[i];
+            if (text == null)
+            {
+                continue;
+            }
+
+            if (text.gameObject.name == "Respawn")
+            {
+                respawnText = text;
+            }
+            else if (text.gameObject.name == "WinStatus")
+            {
+                winStatusText = text;
+            }
+        }
+
+        if (respawnText == null && texts.Length > 0)
+        {
+            respawnText = texts[0];
+        }
     }
 
 }

@@ -4903,7 +4903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f4ee83d2509d64cb77b16b4d0f7f46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statusText: {fileID: 1756935214}
+  statusText: {fileID: 0}
   reviveTeammateMessage: Revive your teammate before advancing
   holdPositionMessage: Hold down the position whilst awaiting your team
 --- !u!65 &998868736
