@@ -60,6 +60,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        canRespawn = false;
 
         SpawnGravestoneAtMyPosition();
         if (deathAudio != null)
@@ -73,13 +74,17 @@ public class PlayerHealth : MonoBehaviour
 
         Debug.Log($"{name} died.");
 
-        // simplest "death" for now:
         // disable movement/shoot scripts so they stop acting
         MonoBehaviour[] scripts = GetComponents<MonoBehaviour>();
         for (int i = 0; i < scripts.Length; i++)
         {
-            if (scripts[i] != this)
-                scripts[i].enabled = false;
+            MonoBehaviour script = scripts[i];
+            if (script == this) continue;
+            if (script is PlayerRevive) continue;
+            if (script is PlayerRespawnUI) continue;
+            if (script is UnityEngine.InputSystem.PlayerInput) continue;
+
+            script.enabled = false;
         }
     }
 }
