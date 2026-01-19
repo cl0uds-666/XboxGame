@@ -43,7 +43,7 @@ public class PlayerRevive : MonoBehaviour
     {
         if (playerInput != null && playerInput.actions != null)
         {
-            InputAction respawnAction = playerInput.actions.FindAction("Respawn", true);
+            InputAction respawnAction = playerInput.actions.FindAction("Respawn", false);
             if (respawnAction != null && respawnAction.WasPressedThisFrame())
             {
                 return true;
