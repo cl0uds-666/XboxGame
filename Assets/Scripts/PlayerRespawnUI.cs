@@ -43,6 +43,14 @@ public class PlayerRespawnUI : MonoBehaviour
                 canvas.renderMode = RenderMode.ScreenSpaceCamera;
                 canvas.worldCamera = myCamera;
                 canvas.planeDistance = 1f; // helps avoid weird depth behaviour
+                if (myCamera != null)
+                {
+                    canvas.targetDisplay = myCamera.targetDisplay;
+                }
+            }
+            if (myCamera != null)
+            {
+                ui.transform.SetParent(myCamera.transform, false);
             }
 
             respawnText = ui.GetComponentInChildren<TextMeshProUGUI>(true);
@@ -75,6 +83,14 @@ public class PlayerRespawnUI : MonoBehaviour
         {
             canvas.renderMode = RenderMode.ScreenSpaceCamera;
             canvas.worldCamera = myCamera;
+            if (myCamera != null)
+            {
+                canvas.targetDisplay = myCamera.targetDisplay;
+            }
+        }
+        if (myCamera != null && canvas != null)
+        {
+            canvas.transform.SetParent(myCamera.transform, false);
         }
     }
 

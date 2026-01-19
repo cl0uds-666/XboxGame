@@ -60,6 +60,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        canRespawn = false;
 
         SpawnGravestoneAtMyPosition();
         if (deathAudio != null)
