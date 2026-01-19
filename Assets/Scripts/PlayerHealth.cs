@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -18,10 +19,32 @@ public class PlayerHealth : MonoBehaviour
     public GameObject gravestonePrefab;
     public bool canRespawn = false;
 
+    private readonly Dictionary<MonoBehaviour, bool> initialEnabledStates = new Dictionary<MonoBehaviour, bool>();
+    private Vector3 spawnPosition;
+    private Quaternion spawnRotation;
 
     void Awake()
     {
         currentHealth = maxHealth;
+        spawnPosition = transform.position;
+        spawnRotation = transform.rotation;
+        CacheInitialStates();
+    }
+
+    private void CacheInitialStates()
+    {
+        initialEnabledStates.Clear();
+        MonoBehaviour[] scripts = GetComponents<MonoBehaviour>();
+        for (int i = 0; i < scripts.Length; i++)
+        {
+            MonoBehaviour script = scripts[i];
+            if (script == null)
+            {
+                continue;
+            }
+
+            initialEnabledStates[script] = script.enabled;
+        }
     }
 
     public void TakeDamage(float amount)
@@ -85,6 +108,25 @@ public class PlayerHealth : MonoBehaviour
             if (script is UnityEngine.InputSystem.PlayerInput) continue;
 
             script.enabled = false;
+        }
+    }
+
+    public void ResetToInitialState()
+    {
+        isDead = false;
+        canRespawn = false;
+        currentHealth = maxHealth;
+        transform.position = spawnPosition;
+        transform.rotation = spawnRotation;
+
+        foreach (KeyValuePair<MonoBehaviour, bool> entry in initialEnabledStates)
+        {
+            if (entry.Key == null)
+            {
+                continue;
+            }
+
+            entry.Key.enabled = entry.Value;
         }
     }
 }
