@@ -13,6 +13,7 @@ public class PlayerRespawnUI : MonoBehaviour
     private PlayerHealth health;
     private PlayerInput playerInput;
     private Camera myCamera;
+    private GameObject uiInstance;
 
     void Awake()
     {
@@ -32,33 +33,7 @@ public class PlayerRespawnUI : MonoBehaviour
             }
         }
 
-        if (uiPrefab != null)
-        {
-            GameObject ui = Instantiate(uiPrefab);
-            Canvas canvas = ui.GetComponent<Canvas>();
-
-            // Force correct mode even if the prefab is Overlay
-            if (canvas != null)
-            {
-                canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                canvas.worldCamera = myCamera;
-                canvas.planeDistance = 1f; // helps avoid weird depth behaviour
-                if (myCamera != null)
-                {
-                    canvas.targetDisplay = myCamera.targetDisplay;
-                }
-            }
-            if (myCamera != null)
-            {
-                ui.transform.SetParent(myCamera.transform, false);
-            }
-
-            respawnText = ui.GetComponentInChildren<TextMeshProUGUI>(true);
-            if (respawnText != null)
-            {
-                respawnText.gameObject.SetActive(false);
-            }
-        }
+        EnsureUi();
     }
 
 
@@ -77,20 +52,44 @@ public class PlayerRespawnUI : MonoBehaviour
     {
         myCamera = cam;
 
-        // if UI already exists, retarget it
-        Canvas canvas = respawnText != null ? respawnText.GetComponentInParent<Canvas>() : null;
-        if (canvas != null)
+        EnsureUi();
+    }
+
+    private void EnsureUi()
+    {
+        if (uiInstance == null && uiPrefab != null && myCamera != null)
         {
-            canvas.renderMode = RenderMode.ScreenSpaceCamera;
-            canvas.worldCamera = myCamera;
-            if (myCamera != null)
+            uiInstance = Instantiate(uiPrefab);
+            Canvas canvas = uiInstance.GetComponent<Canvas>();
+
+            // Force correct mode even if the prefab is Overlay
+            if (canvas != null)
             {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = myCamera;
+                canvas.planeDistance = 1f; // helps avoid weird depth behaviour
                 canvas.targetDisplay = myCamera.targetDisplay;
+                canvas.transform.SetParent(myCamera.transform, false);
+            }
+            else
+            {
+                uiInstance.transform.SetParent(myCamera.transform, false);
+            }
+
+            respawnText = uiInstance.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (respawnText != null)
+            {
+                respawnText.gameObject.SetActive(false);
             }
         }
-        if (myCamera != null && canvas != null)
+
+        Canvas existingCanvas = respawnText != null ? respawnText.GetComponentInParent<Canvas>() : null;
+        if (existingCanvas != null && myCamera != null)
         {
-            canvas.transform.SetParent(myCamera.transform, false);
+            existingCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            existingCanvas.worldCamera = myCamera;
+            existingCanvas.targetDisplay = myCamera.targetDisplay;
+            existingCanvas.transform.SetParent(myCamera.transform, false);
         }
     }
 
