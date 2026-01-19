@@ -45,6 +45,7 @@ public class WinZone : MonoBehaviour
         int totalInside = 0;
         bool deadPlayerOutside = false;
         bool alivePlayerOutside = false;
+        List<PlayerRespawnUI> playerUis = new List<PlayerRespawnUI>();
 
         for (int i = 0; i < allPlayers.Length; i++)
         {
@@ -53,6 +54,11 @@ public class WinZone : MonoBehaviour
 
             totalPlayers++;
             bool isInside = playersInside.Contains(ph);
+            PlayerRespawnUI playerUi = allPlayers[i].GetComponent<PlayerRespawnUI>();
+            if (playerUi != null)
+            {
+                playerUis.Add(playerUi);
+            }
 
             if (isInside)
             {
@@ -71,7 +77,7 @@ public class WinZone : MonoBehaviour
             }
         }
 
-        UpdateStatus(deadPlayerOutside, alivePlayerOutside, totalInside);
+        UpdateStatus(deadPlayerOutside, alivePlayerOutside, totalInside, playerUis);
 
         if (totalPlayers > 0 && totalInside == totalPlayers)
         {
@@ -80,7 +86,11 @@ public class WinZone : MonoBehaviour
         }
     }
 
-    private void UpdateStatus(bool deadPlayerOutside, bool alivePlayerOutside, int totalInside)
+    private void UpdateStatus(
+        bool deadPlayerOutside,
+        bool alivePlayerOutside,
+        int totalInside,
+        List<PlayerRespawnUI> playerUis)
     {
         string message = null;
 
@@ -93,10 +103,9 @@ public class WinZone : MonoBehaviour
             message = holdPositionMessage;
         }
 
-        PlayerRespawnUI[] uiInstances = FindObjectsOfType<PlayerRespawnUI>(true);
-        for (int i = 0; i < uiInstances.Length; i++)
+        for (int i = 0; i < playerUis.Count; i++)
         {
-            PlayerRespawnUI ui = uiInstances[i];
+            PlayerRespawnUI ui = playerUis[i];
             if (ui == null || ui.winStatusText == null)
             {
                 continue;
@@ -106,6 +115,7 @@ public class WinZone : MonoBehaviour
             bool shouldShow = totalInside > 0
                 && !string.IsNullOrEmpty(message)
                 && health != null
+                && !health.isDead
                 && playersInside.Contains(health);
 
             if (shouldShow && ui.winStatusText.text != message)
