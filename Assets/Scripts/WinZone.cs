@@ -1,13 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class WinZone : MonoBehaviour
 {
-    [Header("UI")]
-    public TextMeshProUGUI statusText;
-
     [Header("Messages")]
     [TextArea(2, 3)]
     public string reviveTeammateMessage = "Revive your teammate before advancing";
@@ -49,6 +45,7 @@ public class WinZone : MonoBehaviour
         int totalInside = 0;
         bool deadPlayerOutside = false;
         bool alivePlayerOutside = false;
+        List<PlayerRespawnUI> playerUis = new List<PlayerRespawnUI>();
 
         for (int i = 0; i < allPlayers.Length; i++)
         {
@@ -57,6 +54,11 @@ public class WinZone : MonoBehaviour
 
             totalPlayers++;
             bool isInside = playersInside.Contains(ph);
+            PlayerRespawnUI playerUi = allPlayers[i].GetComponent<PlayerRespawnUI>();
+            if (playerUi != null)
+            {
+                playerUis.Add(playerUi);
+            }
 
             if (isInside)
             {
@@ -75,7 +77,7 @@ public class WinZone : MonoBehaviour
             }
         }
 
-        UpdateStatus(deadPlayerOutside, alivePlayerOutside, totalInside);
+        UpdateStatus(deadPlayerOutside, alivePlayerOutside, totalInside, playerUis);
 
         if (totalPlayers > 0 && totalInside == totalPlayers)
         {
@@ -84,19 +86,12 @@ public class WinZone : MonoBehaviour
         }
     }
 
-    private void UpdateStatus(bool deadPlayerOutside, bool alivePlayerOutside, int totalInside)
+    private void UpdateStatus(
+        bool deadPlayerOutside,
+        bool alivePlayerOutside,
+        int totalInside,
+        List<PlayerRespawnUI> playerUis)
     {
-        if (statusText == null) return;
-
-        if (totalInside <= 0)
-        {
-            if (statusText.gameObject.activeSelf)
-            {
-                statusText.gameObject.SetActive(false);
-            }
-            return;
-        }
-
         string message = null;
 
         if (deadPlayerOutside)
@@ -108,23 +103,30 @@ public class WinZone : MonoBehaviour
             message = holdPositionMessage;
         }
 
-        if (string.IsNullOrEmpty(message))
+        for (int i = 0; i < playerUis.Count; i++)
         {
-            if (statusText.gameObject.activeSelf)
+            PlayerRespawnUI ui = playerUis[i];
+            if (ui == null || ui.winStatusText == null)
             {
-                statusText.gameObject.SetActive(false);
+                continue;
             }
-            return;
-        }
 
-        if (statusText.text != message)
-        {
-            statusText.text = message;
-        }
+            PlayerHealth health = ui.GetComponent<PlayerHealth>();
+            bool shouldShow = totalInside > 0
+                && !string.IsNullOrEmpty(message)
+                && health != null
+                && !health.isDead
+                && playersInside.Contains(health);
 
-        if (!statusText.gameObject.activeSelf)
-        {
-            statusText.gameObject.SetActive(true);
+            if (shouldShow && ui.winStatusText.text != message)
+            {
+                ui.winStatusText.text = message;
+            }
+
+            if (ui.winStatusText.gameObject.activeSelf != shouldShow)
+            {
+                ui.winStatusText.gameObject.SetActive(shouldShow);
+            }
         }
     }
 }

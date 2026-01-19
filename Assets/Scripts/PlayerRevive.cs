@@ -70,16 +70,7 @@ public class PlayerRevive : MonoBehaviour
 
     void Respawn()
     {
-        health.isDead = false;
-        health.canRespawn = false;
-        health.currentHealth = health.maxHealth;
-
-        // re-enable scripts
-        MonoBehaviour[] scripts = GetComponents<MonoBehaviour>();
-        for (int i = 0; i < scripts.Length; i++)
-        {
-            scripts[i].enabled = true;
-        }
+        health.ResetToInitialState();
 
         Debug.Log($"{name}: Respawned!");
     }
