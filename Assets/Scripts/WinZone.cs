@@ -1,13 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class WinZone : MonoBehaviour
 {
-    [Header("UI")]
-    public TextMeshProUGUI statusText;
-
     [Header("Messages")]
     [TextArea(2, 3)]
     public string reviveTeammateMessage = "Revive your teammate before advancing";
@@ -15,7 +11,6 @@ public class WinZone : MonoBehaviour
     public string holdPositionMessage = "Hold down the position whilst awaiting your team";
 
     private HashSet<PlayerHealth> playersInside = new HashSet<PlayerHealth>();
-    private readonly List<TextMeshProUGUI> statusTargets = new List<TextMeshProUGUI>();
 
     void Update()
     {
@@ -87,15 +82,6 @@ public class WinZone : MonoBehaviour
 
     private void UpdateStatus(bool deadPlayerOutside, bool alivePlayerOutside, int totalInside)
     {
-        List<TextMeshProUGUI> targets = GetStatusTargets();
-        if (targets.Count == 0) return;
-
-        if (totalInside <= 0)
-        {
-            SetTargetsActive(targets, false, null);
-            return;
-        }
-
         string message = null;
 
         if (deadPlayerOutside)
@@ -107,24 +93,6 @@ public class WinZone : MonoBehaviour
             message = holdPositionMessage;
         }
 
-        if (string.IsNullOrEmpty(message))
-        {
-            SetTargetsActive(targets, false, null);
-            return;
-        }
-
-        SetTargetsActive(targets, true, message);
-    }
-
-    private List<TextMeshProUGUI> GetStatusTargets()
-    {
-        statusTargets.Clear();
-
-        if (statusText != null)
-        {
-            statusTargets.Add(statusText);
-        }
-
         PlayerRespawnUI[] uiInstances = FindObjectsOfType<PlayerRespawnUI>(true);
         for (int i = 0; i < uiInstances.Length; i++)
         {
@@ -134,33 +102,20 @@ public class WinZone : MonoBehaviour
                 continue;
             }
 
-            if (!statusTargets.Contains(ui.winStatusText))
-            {
-                statusTargets.Add(ui.winStatusText);
-            }
-        }
+            PlayerHealth health = ui.GetComponent<PlayerHealth>();
+            bool shouldShow = totalInside > 0
+                && !string.IsNullOrEmpty(message)
+                && health != null
+                && playersInside.Contains(health);
 
-        return statusTargets;
-    }
-
-    private void SetTargetsActive(List<TextMeshProUGUI> targets, bool isActive, string message)
-    {
-        for (int i = 0; i < targets.Count; i++)
-        {
-            TextMeshProUGUI target = targets[i];
-            if (target == null)
+            if (shouldShow && ui.winStatusText.text != message)
             {
-                continue;
+                ui.winStatusText.text = message;
             }
 
-            if (!string.IsNullOrEmpty(message) && target.text != message)
+            if (ui.winStatusText.gameObject.activeSelf != shouldShow)
             {
-                target.text = message;
-            }
-
-            if (target.gameObject.activeSelf != isActive)
-            {
-                target.gameObject.SetActive(isActive);
+                ui.winStatusText.gameObject.SetActive(shouldShow);
             }
         }
     }
