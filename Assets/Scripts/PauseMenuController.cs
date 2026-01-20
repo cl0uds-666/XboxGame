@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
 {
+    private const string PlayerUiName = "PlayerUI";
+    private const string PauseMenuName = "PauseMenu";
+    private const string PauseMessageName = "PauseMessage";
+
     public static PauseMenuController Instance { get; private set; }
 
     [Header("UI")]
@@ -135,6 +139,11 @@ public class PauseMenuController : MonoBehaviour
     {
         if (pauseMenuUI == null)
         {
+            TryUsePlayerUiPauseMenu();
+        }
+
+        if (pauseMenuUI == null)
+        {
             BuildFallbackUi();
         }
 
@@ -161,10 +170,72 @@ public class PauseMenuController : MonoBehaviour
 
         if (messageText == null)
         {
-            messageText = pauseMenuUI.GetComponentInChildren<TextMeshProUGUI>(true);
+            messageText = FindPauseMessageText();
+            if (messageText == null)
+            {
+                messageText = CreatePauseMessageText();
+            }
         }
 
         pauseMenuUI.SetActive(false);
+    }
+
+    private void TryUsePlayerUiPauseMenu()
+    {
+        GameObject playerUi = GameObject.Find(PlayerUiName);
+        if (playerUi == null)
+        {
+            return;
+        }
+
+        Transform pauseMenuTransform = playerUi.transform.Find(PauseMenuName);
+        if (pauseMenuTransform == null)
+        {
+            return;
+        }
+
+        pauseMenuUI = pauseMenuTransform.gameObject;
+    }
+
+    private TextMeshProUGUI FindPauseMessageText()
+    {
+        if (pauseMenuUI == null)
+        {
+            return null;
+        }
+
+        Transform messageTransform = pauseMenuUI.transform.Find(PauseMessageName);
+        if (messageTransform == null)
+        {
+            return null;
+        }
+
+        return messageTransform.GetComponent<TextMeshProUGUI>();
+    }
+
+    private TextMeshProUGUI CreatePauseMessageText()
+    {
+        if (pauseMenuUI == null)
+        {
+            return null;
+        }
+
+        GameObject textObject = new GameObject(PauseMessageName);
+        textObject.transform.SetParent(pauseMenuUI.transform, false);
+
+        RectTransform textRect = textObject.AddComponent<RectTransform>();
+        textRect.anchorMin = new Vector2(0.5f, 0.5f);
+        textRect.anchorMax = new Vector2(0.5f, 0.5f);
+        textRect.anchoredPosition = new Vector2(0f, 160f);
+        textRect.sizeDelta = new Vector2(900f, 200f);
+
+        TextMeshProUGUI createdText = textObject.AddComponent<TextMeshProUGUI>();
+        createdText.alignment = TextAlignmentOptions.Center;
+        createdText.fontSize = 48;
+        createdText.text = pauseMessage;
+        createdText.color = Color.white;
+
+        return createdText;
     }
 
     private void SetMessageText(string message)
