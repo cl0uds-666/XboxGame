@@ -7,6 +7,19 @@ public class MainMenuUI : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject creditsPanel;
 
+    private void Update()
+    {
+        if (creditsPanel == null || !creditsPanel.activeSelf)
+        {
+            return;
+        }
+
+        if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton1))
+        {
+            CloseCredits();
+        }
+    }
+
     public void PlayGame()
     {
         SceneManager.LoadScene(1); // your game scene index
