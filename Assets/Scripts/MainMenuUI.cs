@@ -22,12 +22,12 @@ public class MainMenuUI : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene(1); // your game scene index
+        SceneManager.LoadScene(1); // main
     }
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene(0); // main menu scene index
+        SceneManager.LoadScene(0); // menu 
     }
 
     public void QuitGame()

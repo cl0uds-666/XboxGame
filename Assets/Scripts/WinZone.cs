@@ -11,7 +11,7 @@ public class WinZone : MonoBehaviour
     public string holdPositionMessage = "Hold down the position whilst awaiting your team";
 
     [Header("Helicopter Escape")]
-    public HelicopterExitSequence helicopter;  // drag your helicopter here
+    public HelicopterExitSequence helicopter;  
     public string winSceneName = "Win";         // fallback if helicopter not assigned
 
     private HashSet<PlayerHealth> playersInside = new HashSet<PlayerHealth>();
@@ -84,16 +84,16 @@ public class WinZone : MonoBehaviour
             }
         }
 
-        // Keep your existing notification system EXACTLY as-is
+        
         UpdateStatus(deadPlayerOutside, alivePlayerOutside, totalInside, playerUis);
 
-        // Win condition (unchanged): everyone (alive or dead) is in the zone
+        // Win condition everyone (alive or dead) is in the zone
         if (totalPlayers > 0 && totalInside == totalPlayers)
         {
             hasWon = true;
             Debug.Log("WIN! All players are in the zone.");
 
-            // Hide the status text once we commit to winning (optional polish)
+            // Hide the status text once we commit to winning 
             for (int i = 0; i < playerUis.Count; i++)
             {
                 if (playerUis[i] != null && playerUis[i].winStatusText != null)
@@ -102,7 +102,7 @@ public class WinZone : MonoBehaviour
                 }
             }
 
-            // NEW: Helicopter escape, then transition
+            // Helicopter escape, then transition
             if (helicopter != null)
             {
                 helicopter.finalSceneName = winSceneName; // so it loads correct scene at end
@@ -110,7 +110,7 @@ public class WinZone : MonoBehaviour
             }
             else
             {
-                // Fallback (keeps your old behaviour)
+                // Fallback 
                 SceneManager.LoadScene(winSceneName);
             }
         }

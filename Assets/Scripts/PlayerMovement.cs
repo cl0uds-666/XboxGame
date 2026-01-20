@@ -1,5 +1,7 @@
 using UnityEngine;
 
+
+// No longer in use
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -42,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // Fallback if you didn't assign a groundCheck
+            // Fallback if didn't assign a groundCheck
             isGrounded = controller.isGrounded;
         }
 

@@ -41,7 +41,7 @@ public class ZombieAI : MonoBehaviour
     {
         if (isDead || agent == null || !agent.enabled) return;
 
-        // Re-pick target occasionally (supports multiplayer)
+        // Re-pick target occasionally 
         if (Time.time >= nextRetargetTime)
         {
             nextRetargetTime = Time.time + retargetInterval;

@@ -19,7 +19,7 @@ public class SplitScreenManager : MonoBehaviour
 
     void OnValidate()
     {
-        // Live preview in editor when you change activePlayers
+        // Live preview in editor when changing activePlayers
         ApplySplitScreen();
     }
 

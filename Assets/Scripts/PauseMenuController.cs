@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
 {
+    private const string PlayerUiName = "PlayerUI";
+    private const string PauseMenuName = "PauseMenu";
+
     public static PauseMenuController Instance { get; private set; }
 
     [Header("UI")]
@@ -13,11 +16,13 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private Color overlayColor = new Color(0f, 0f, 0f, 0.6f);
     [TextArea(2, 3)]
-    [SerializeField] private string pauseMessage = "Paused\nPress Start or Esc to Resume";
+    [SerializeField] private string pauseMessage = "Paused\nPress Start to Resume\nPress B to Quit";
     [TextArea(2, 3)]
     [SerializeField] private string disconnectMessage = "Controller disconnected\nReconnect to Resume";
 
     private bool isPaused;
+
+    public bool IsPaused => isPaused;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Bootstrap()
@@ -114,6 +119,7 @@ public class PauseMenuController : MonoBehaviour
 
     public void QuitToMainMenu()
     {
+        pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
@@ -133,6 +139,11 @@ public class PauseMenuController : MonoBehaviour
 
     private void EnsureUi()
     {
+        if (pauseMenuUI == null)
+        {
+            TryUsePlayerUiPauseMenu();
+        }
+
         if (pauseMenuUI == null)
         {
             BuildFallbackUi();
@@ -167,6 +178,23 @@ public class PauseMenuController : MonoBehaviour
         pauseMenuUI.SetActive(false);
     }
 
+    private void TryUsePlayerUiPauseMenu()
+    {
+        GameObject playerUi = GameObject.Find(PlayerUiName);
+        if (playerUi == null)
+        {
+            return;
+        }
+
+        Transform pauseMenuTransform = playerUi.transform.Find(PauseMenuName);
+        if (pauseMenuTransform == null)
+        {
+            return;
+        }
+
+        pauseMenuUI = pauseMenuTransform.gameObject;
+    }
+
     private void SetMessageText(string message)
     {
         if (messageText != null)
@@ -174,6 +202,8 @@ public class PauseMenuController : MonoBehaviour
             messageText.text = message;
         }
     }
+
+    // built via Gemini as for some reason UI would not co-operate MAKE SURE TO CHANGE
 
     private void BuildFallbackUi()
     {

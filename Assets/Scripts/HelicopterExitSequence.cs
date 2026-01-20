@@ -10,13 +10,13 @@ public class HelicopterExitSequence : MonoBehaviour
     public float rotateSpeed = 6f;      // how fast it turns to face direction
 
     [Header("Players")]
-    public string playerTag = "Player"; // your players are tagged Player
+    public string playerTag = "Player"; 
     public bool parentPlayers = true;
     public Transform playerMount;
 
 
     [Header("Scene")]
-    public string finalSceneName = "Win"; // change to your final scene name
+    public string finalSceneName = "Win"; 
 
     private bool started = false;
     private Transform[] snappedPlayers;
@@ -74,7 +74,7 @@ public class HelicopterExitSequence : MonoBehaviour
 
                 transform.position = transform.position + step;
 
-                // rotate toward movement direction (optional but looks nicer)
+                // rotate toward movement direction
                 Vector3 flatDir = new Vector3(dir.x, 0f, dir.z);
                 if (flatDir.sqrMagnitude > 0.001f)
                 {

@@ -27,7 +27,7 @@ public class EnemyHealth : MonoBehaviour
     {
         onDeath?.Invoke();
 
-        // call ZombieAI.Die() here
+        
         ZombieAI ai = GetComponent<ZombieAI>();
         if (ai != null)
         {
