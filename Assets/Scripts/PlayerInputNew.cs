@@ -65,4 +65,12 @@ public class PlayerInputNew : MonoBehaviour
             PauseMenuController.Instance.TogglePause();
         }
     }
+
+    public void OnQuit(InputValue value)
+    {
+        if (value.isPressed && PauseMenuController.Instance != null && PauseMenuController.Instance.IsPaused)
+        {
+            PauseMenuController.Instance.QuitToMainMenu();
+        }
+    }
 }
