@@ -19,6 +19,8 @@ public class HelicopterExitSequence : MonoBehaviour
     public string finalSceneName = "Win"; // change to your final scene name
 
     private bool started = false;
+    private Transform[] snappedPlayers;
+    private Transform activeMount;
 
     public void StartSequence()
     {
@@ -34,10 +36,20 @@ public class HelicopterExitSequence : MonoBehaviour
         if (parentPlayers)
         {
             GameObject[] allPlayers = GameObject.FindGameObjectsWithTag(playerTag);
+            activeMount = playerMount != null ? playerMount : transform;
+            snappedPlayers = new Transform[allPlayers.Length];
 
             for (int i = 0; i < allPlayers.Length; i++)
             {
-                allPlayers[i].transform.SetParent(playerMount, true);
+                GameObject player = allPlayers[i];
+                Transform playerTransform = player.transform;
+                snappedPlayers[i] = playerTransform;
+
+                DisablePlayerControl(player);
+
+                playerTransform.SetParent(activeMount, false);
+                playerTransform.localPosition = Vector3.zero;
+                playerTransform.localRotation = Quaternion.identity;
             }
         }
 
@@ -56,6 +68,7 @@ public class HelicopterExitSequence : MonoBehaviour
 
             while (Vector3.Distance(transform.position, target.position) > 0.05f)
             {
+                SnapPlayersToMount();
                 Vector3 dir = (target.position - transform.position);
                 Vector3 step = dir.normalized * moveSpeed * Time.deltaTime;
 
@@ -73,9 +86,54 @@ public class HelicopterExitSequence : MonoBehaviour
             }
 
             transform.position = target.position;
+            SnapPlayersToMount();
         }
 
         // done
         SceneManager.LoadScene(finalSceneName);
+    }
+
+    private void SnapPlayersToMount()
+    {
+        if (!parentPlayers || snappedPlayers == null || activeMount == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < snappedPlayers.Length; i++)
+        {
+            Transform playerTransform = snappedPlayers[i];
+            if (playerTransform == null) continue;
+
+            playerTransform.position = activeMount.position;
+            playerTransform.rotation = activeMount.rotation;
+        }
+    }
+
+    private void DisablePlayerControl(GameObject player)
+    {
+        PlayerMovement movement = player.GetComponent<PlayerMovement>();
+        if (movement != null)
+        {
+            movement.enabled = false;
+        }
+
+        PlayerInputNew inputNew = player.GetComponent<PlayerInputNew>();
+        if (inputNew != null)
+        {
+            inputNew.enabled = false;
+        }
+
+        UnityEngine.InputSystem.PlayerInput input = player.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+        if (input != null)
+        {
+            input.enabled = false;
+        }
+
+        CharacterController controller = player.GetComponent<CharacterController>();
+        if (controller != null)
+        {
+            controller.enabled = false;
+        }
     }
 }
