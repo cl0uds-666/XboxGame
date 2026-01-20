@@ -10,10 +10,16 @@ public class WinZone : MonoBehaviour
     [TextArea(2, 3)]
     public string holdPositionMessage = "Hold down the position whilst awaiting your team";
 
+    [Header("Helicopter Escape")]
+    public HelicopterExitSequence helicopter;  // drag your helicopter here
+    public string winSceneName = "Win";         // fallback if helicopter not assigned
+
     private HashSet<PlayerHealth> playersInside = new HashSet<PlayerHealth>();
+    private bool hasWon = false;
 
     void Update()
     {
+        if (hasWon) return;
         CheckWin();
     }
 
@@ -54,6 +60,7 @@ public class WinZone : MonoBehaviour
 
             totalPlayers++;
             bool isInside = playersInside.Contains(ph);
+
             PlayerRespawnUI playerUi = allPlayers[i].GetComponent<PlayerRespawnUI>();
             if (playerUi != null)
             {
@@ -77,12 +84,35 @@ public class WinZone : MonoBehaviour
             }
         }
 
+        // Keep your existing notification system EXACTLY as-is
         UpdateStatus(deadPlayerOutside, alivePlayerOutside, totalInside, playerUis);
 
+        // Win condition (unchanged): everyone (alive or dead) is in the zone
         if (totalPlayers > 0 && totalInside == totalPlayers)
         {
+            hasWon = true;
             Debug.Log("WIN! All players are in the zone.");
-            SceneManager.LoadScene("Win");
+
+            // Hide the status text once we commit to winning (optional polish)
+            for (int i = 0; i < playerUis.Count; i++)
+            {
+                if (playerUis[i] != null && playerUis[i].winStatusText != null)
+                {
+                    playerUis[i].winStatusText.gameObject.SetActive(false);
+                }
+            }
+
+            // NEW: Helicopter escape, then transition
+            if (helicopter != null)
+            {
+                helicopter.finalSceneName = winSceneName; // so it loads correct scene at end
+                helicopter.StartSequence();
+            }
+            else
+            {
+                // Fallback (keeps your old behaviour)
+                SceneManager.LoadScene(winSceneName);
+            }
         }
     }
 
