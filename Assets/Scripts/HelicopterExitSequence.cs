@@ -34,10 +34,14 @@ public class HelicopterExitSequence : MonoBehaviour
         if (parentPlayers)
         {
             GameObject[] allPlayers = GameObject.FindGameObjectsWithTag(playerTag);
+            Transform mount = playerMount != null ? playerMount : transform;
 
             for (int i = 0; i < allPlayers.Length; i++)
             {
-                allPlayers[i].transform.SetParent(playerMount, true);
+                Transform playerTransform = allPlayers[i].transform;
+                playerTransform.SetParent(mount, false);
+                playerTransform.localPosition = Vector3.zero;
+                playerTransform.localRotation = Quaternion.identity;
             }
         }
 
