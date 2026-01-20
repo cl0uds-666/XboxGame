@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
@@ -8,14 +9,14 @@ public class PauseMenuController : MonoBehaviour
     public static PauseMenuController Instance { get; private set; }
 
     [Header("UI")]
-    [SerializeField] private GameObject pauseMenuRoot;
+    public GameObject pauseMenuUI;
+    [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private Color overlayColor = new Color(0f, 0f, 0f, 0.6f);
     [TextArea(2, 3)]
     [SerializeField] private string pauseMessage = "Paused\nPress Start or Esc to Resume";
     [TextArea(2, 3)]
     [SerializeField] private string disconnectMessage = "Controller disconnected\nReconnect to Resume";
 
-    private TextMeshProUGUI messageText;
     private bool isPaused;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -35,7 +36,7 @@ public class PauseMenuController : MonoBehaviour
 
         GameObject root = new GameObject("PauseMenu");
         PauseMenuController controller = root.AddComponent<PauseMenuController>();
-        controller.BuildDefaultUi();
+        controller.BuildFallbackUi();
     }
 
     private void Awake()
@@ -63,31 +64,58 @@ public class PauseMenuController : MonoBehaviour
 
     public void TogglePause()
     {
-        SetPaused(!isPaused, false);
+        if (isPaused)
+        {
+            Resume();
+        }
+        else
+        {
+            Pause();
+        }
+    }
+
+    public void Resume()
+    {
+        if (pauseMenuUI != null)
+        {
+            pauseMenuUI.SetActive(false);
+        }
+
+        Time.timeScale = 1f;
+        isPaused = false;
+        SetMessageText(pauseMessage);
+    }
+
+    public void Pause()
+    {
+        SetMessageText(pauseMessage);
+
+        if (pauseMenuUI != null)
+        {
+            pauseMenuUI.SetActive(true);
+        }
+
+        Time.timeScale = 0f;
+        isPaused = true;
     }
 
     public void PauseForDisconnect()
     {
-        SetPaused(true, true);
+        SetMessageText(disconnectMessage);
+
+        if (pauseMenuUI != null)
+        {
+            pauseMenuUI.SetActive(true);
+        }
+
+        Time.timeScale = 0f;
+        isPaused = true;
     }
 
-    private void SetPaused(bool paused, bool disconnected)
+    public void QuitToMainMenu()
     {
-        isPaused = paused;
-
-        if (pauseMenuRoot != null)
-        {
-            pauseMenuRoot.SetActive(paused);
-        }
-
-        if (messageText != null)
-        {
-            messageText.text = paused
-                ? (disconnected ? disconnectMessage : pauseMessage)
-                : pauseMessage;
-        }
-
-        Time.timeScale = paused ? 0f : 1f;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
     }
 
     private void HandleDeviceChange(InputDevice device, InputDeviceChange change)
@@ -105,24 +133,24 @@ public class PauseMenuController : MonoBehaviour
 
     private void EnsureUi()
     {
-        if (pauseMenuRoot == null)
+        if (pauseMenuUI == null)
         {
-            BuildDefaultUi();
+            BuildFallbackUi();
         }
 
-        if (pauseMenuRoot == null)
+        if (pauseMenuUI == null)
         {
             return;
         }
 
-        Canvas canvas = pauseMenuRoot.GetComponent<Canvas>();
+        Canvas canvas = pauseMenuUI.GetComponent<Canvas>();
         if (canvas != null)
         {
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.targetDisplay = 0;
         }
 
-        RectTransform rectTransform = pauseMenuRoot.GetComponent<RectTransform>();
+        RectTransform rectTransform = pauseMenuUI.GetComponent<RectTransform>();
         if (rectTransform != null)
         {
             rectTransform.anchorMin = Vector2.zero;
@@ -133,16 +161,21 @@ public class PauseMenuController : MonoBehaviour
 
         if (messageText == null)
         {
-            messageText = pauseMenuRoot.GetComponentInChildren<TextMeshProUGUI>();
+            messageText = pauseMenuUI.GetComponentInChildren<TextMeshProUGUI>(true);
         }
 
-        if (pauseMenuRoot.activeSelf)
+        pauseMenuUI.SetActive(false);
+    }
+
+    private void SetMessageText(string message)
+    {
+        if (messageText != null)
         {
-            pauseMenuRoot.SetActive(false);
+            messageText.text = message;
         }
     }
 
-    private void BuildDefaultUi()
+    private void BuildFallbackUi()
     {
         GameObject canvasObject = new GameObject("PauseMenuCanvas");
         canvasObject.transform.SetParent(transform, false);
@@ -191,7 +224,7 @@ public class PauseMenuController : MonoBehaviour
         messageText.text = pauseMessage;
         messageText.color = Color.white;
 
-        pauseMenuRoot = canvasObject;
-        pauseMenuRoot.SetActive(false);
+        pauseMenuUI = canvasObject;
+        pauseMenuUI.SetActive(false);
     }
 }
