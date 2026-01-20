@@ -60,7 +60,9 @@ public class PlayerInputNew : MonoBehaviour
 
     public void OnPause(InputValue value)
     {
-        if (value.isPressed)
-            Debug.Log($"{name}: Pause pressed");
+        if (value.isPressed && PauseMenuController.Instance != null)
+        {
+            PauseMenuController.Instance.TogglePause();
+        }
     }
 }
