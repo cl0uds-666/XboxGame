@@ -1390,6 +1390,7 @@ GameObject:
   - component: {fileID: 7625677605068770499}
   - component: {fileID: 2758932287292138249}
   - component: {fileID: 5226617952056999955}
+  - component: {fileID: 2679898703361843544}
   m_Layer: 0
   m_Name: SS_Character_SpaceSuitHelmet_03_White
   m_TagString: Player
@@ -1630,6 +1631,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d504b5ab7024d7c498aa912a2e36bff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heartbeatEnabled: 1
+  heartbeatStartHealth: 40
+  heartbeatFastHealth: 20
+  heartbeatPulseDuration: 0.12
+  heartbeatSlowInterval: 0.8
+  heartbeatFastInterval: 0.4
+  heartbeatLowFrequency: 0.25
+  heartbeatHighFrequency: 0.6
 --- !u!114 &7237909564134124050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1665,7 +1674,7 @@ MonoBehaviour:
   isDead: 0
   hurtAudio: {fileID: 8825147304473563758}
   deathAudio: {fileID: 7625677605068770499}
-  gravestonePrefab: {fileID: 0}
+  gravestonePrefab: {fileID: 100000, guid: b6d0daa4036bab644b201bb421a19889, type: 3}
   canRespawn: 0
 --- !u!82 &4205746138078542249
 AudioSource:
@@ -1985,6 +1994,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2274d3185e734f34a8374302f9673d2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2679898703361843544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0176c4306ddeaf649afd4d9d81830c92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiPrefab: {fileID: 843964081854630071, guid: e8afb880df7bc694299565fa97b584a9, type: 3}
+  respawnText: {fileID: 0}
+  winStatusText: {fileID: 0}
+  healthText: {fileID: 0}
+  healthOffset: {x: 16, y: -16}
+  healthFontSize: 24
+  respawnMessage: Press A to Respawn
+  gameOverMessage: 'Press A to Restart
+
+    Press B to return to Main Menu'
 --- !u!1 &195578
 GameObject:
   m_ObjectHideFlags: 0
