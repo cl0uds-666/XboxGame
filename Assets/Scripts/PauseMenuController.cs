@@ -119,6 +119,7 @@ public class PauseMenuController : MonoBehaviour
 
     public void QuitToMainMenu()
     {
+        pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
@@ -201,6 +202,8 @@ public class PauseMenuController : MonoBehaviour
             messageText.text = message;
         }
     }
+
+    // built via Gemini as for some reason UI would not co-operate MAKE SURE TO CHANGE
 
     private void BuildFallbackUi()
     {

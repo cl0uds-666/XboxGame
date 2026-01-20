@@ -96,7 +96,6 @@ public class Spawner : MonoBehaviour
 
     Transform[] FindPlayers()
     {
-        // Assumes your player objects are tagged "Player"
         GameObject[] gos = GameObject.FindGameObjectsWithTag("Player");
 
         List<Transform> list = new List<Transform>();

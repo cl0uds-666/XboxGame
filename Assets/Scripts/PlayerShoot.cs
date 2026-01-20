@@ -8,7 +8,7 @@ public class PlayerShoot : MonoBehaviour
     public float fireRate = 8f; // shots per second
 
     [Header("Origin")]
-    public Transform firePoint; // optional; if null we use transform position + up
+    public Transform firePoint; 
 
     [Header("Audio")]
     public AudioSource shootAudio;
@@ -31,7 +31,7 @@ public class PlayerShoot : MonoBehaviour
         dir.y = 0f;
         dir.Normalize();
 
-        float radius = 0.35f; // forgiveness (tweak 0.2 - 0.5)
+        float radius = 0.4f; // forgiveness 
 
         Debug.Log($"{name}: Firing from {origin} in direction {dir} (radius {radius})");
         Debug.DrawRay(origin, dir * range, Color.red, 0.2f);

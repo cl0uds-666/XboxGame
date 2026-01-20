@@ -276,6 +276,8 @@ public class PlayerRespawnUI : MonoBehaviour
             return;
         }
 
+        // UI not working again, make sure to change
+
         GameObject healthObject = new GameObject("Health");
         healthObject.transform.SetParent(parentTransform, false);
 

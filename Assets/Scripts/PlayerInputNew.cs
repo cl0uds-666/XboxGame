@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 public class PlayerInputNew : MonoBehaviour
 {
     [Header("References")]
-    public PlayerMovement movement; // drag your existing script (or leave null)
-    public PlayerShoot shoot;       // drag your PlayerShoot
+    public PlayerMovement movement; 
+    public PlayerShoot shoot;       
 
     [Header("Turn Settings")]
     public float turnSpeed = 180f;
@@ -36,7 +36,7 @@ public class PlayerInputNew : MonoBehaviour
         }
     }
 
-    // Called automatically by PlayerInput (Send Messages)
+    // Called automatically by PlayerInput 
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
