@@ -11,6 +11,11 @@ public class PlayerRespawnUI : MonoBehaviour
     [Header("UI Reference (auto)")]
     public TextMeshProUGUI respawnText;
     public TextMeshProUGUI winStatusText;
+    public TextMeshProUGUI healthText;
+
+    [Header("Health HUD")]
+    public Vector2 healthOffset = new Vector2(16f, -16f);
+    public int healthFontSize = 24;
 
     [Header("Messages")]
     [TextArea(2, 3)]
@@ -48,7 +53,9 @@ public class PlayerRespawnUI : MonoBehaviour
 
     void Update()
     {
-        if (health == null || respawnText == null) return;
+        if (health == null) return;
+
+        UpdateHealthText();
 
         bool allDead = AreAllPlayersDead();
         if (allDead)
@@ -85,12 +92,12 @@ public class PlayerRespawnUI : MonoBehaviour
             gameOverTriggered = false;
         }
 
-        bool show = health.isDead && health.canRespawn;
+        bool show = respawnText != null && health.isDead && health.canRespawn;
         if (show && respawnText.text != respawnMessage)
         {
             respawnText.text = respawnMessage;
         }
-        if (respawnText.gameObject.activeSelf != show)
+        if (respawnText != null && respawnText.gameObject.activeSelf != show)
         {
             respawnText.gameObject.SetActive(show);
         }
@@ -151,6 +158,11 @@ public class PlayerRespawnUI : MonoBehaviour
         if (existingCanvas != null)
         {
             CacheUiTextReferences(existingCanvas.gameObject);
+        }
+
+        if (healthText == null)
+        {
+            CreateHealthText();
         }
     }
 
@@ -230,11 +242,76 @@ public class PlayerRespawnUI : MonoBehaviour
             {
                 winStatusText = text;
             }
+            else if (text.gameObject.name == "Health")
+            {
+                healthText = text;
+            }
         }
 
         if (respawnText == null && texts.Length > 0)
         {
             respawnText = texts[0];
+        }
+    }
+
+    private void CreateHealthText()
+    {
+        Transform parentTransform = null;
+
+        if (respawnText != null)
+        {
+            parentTransform = respawnText.transform.parent;
+        }
+        else if (uiInstance != null)
+        {
+            parentTransform = uiInstance.transform;
+        }
+        else if (myCamera != null)
+        {
+            parentTransform = myCamera.transform;
+        }
+
+        if (parentTransform == null)
+        {
+            return;
+        }
+
+        GameObject healthObject = new GameObject("Health");
+        healthObject.transform.SetParent(parentTransform, false);
+
+        RectTransform rect = healthObject.AddComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0f, 1f);
+        rect.anchorMax = new Vector2(0f, 1f);
+        rect.pivot = new Vector2(0f, 1f);
+        rect.anchoredPosition = healthOffset;
+        rect.sizeDelta = new Vector2(300f, 40f);
+
+        healthText = healthObject.AddComponent<TextMeshProUGUI>();
+        healthText.fontSize = healthFontSize;
+        healthText.alignment = TextAlignmentOptions.TopLeft;
+    }
+
+    private void UpdateHealthText()
+    {
+        if (healthText == null)
+        {
+            return;
+        }
+
+        string status = health.isDead
+            ? "DEAD"
+            : $"{Mathf.CeilToInt(health.currentHealth)}/{Mathf.CeilToInt(health.maxHealth)}";
+
+        healthText.text = $"HP: {status}";
+
+        PlayerIdentity identity = GetComponent<PlayerIdentity>();
+        if (identity != null)
+        {
+            healthText.color = identity.playerColor;
+        }
+        else
+        {
+            healthText.color = Color.white;
         }
     }
 
